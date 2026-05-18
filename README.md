@@ -1,9 +1,3 @@
-Here is a comprehensive, professional `README.md` for the distributed real-time collaborative editor backend we’ve built.
-
-It covers the entire architecture from Day 1 (Foundation) to Day 5 (Offline Sync), making it an excellent showcase of your distributed systems engineering skills.
-
----
-
 # Real-Time Collaborative Editor Backend
 
 A highly concurrent, horizontally scalable, lock-free real-time backend for a collaborative document editor (similar to Google Docs). Built entirely in Go, this system utilizes Conflict-Free Replicated Data Types (CRDTs), the Actor concurrency model, Redis Pub/Sub for stateless scaling, and Version Vectors for seamless offline synchronization.
