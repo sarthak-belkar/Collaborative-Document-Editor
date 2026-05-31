@@ -10,8 +10,10 @@ import (
 	"syscall"
 	"time"
 
-	"collab-backend/internal/database"
-	"collab-backend/internal/websocket"
+	"googledocsclone/internal/crdt"
+	"googledocsclone/internal/db"
+	"googledocsclone/internal/redis"
+	"googledocsclone/internal/websocket"
 )
 
 func main() {
@@ -21,6 +23,14 @@ func main() {
 		mongoURI = "mongodb://localhost:27017"
 	}
 	database.InitDB(mongoURI)
+
+	// 2. Initialize Redis
+	redisURI := os.Getenv("REDIS_URI")
+	if redisURI == "" {
+		redisURI = "localhost:6379"
+	}
+	redis.InitRedis(redisURI)
+
 
 	// 2. Setup WebSocket Hub
 	hub := websocket.NewHub()
@@ -32,6 +42,8 @@ func main() {
 	// REST Endpoints
 	mux.HandleFunc("POST /documents", handleCreateDocument)
 	mux.HandleFunc("GET /documents/{id}", handleGetDocument)
+	mux.HandleFunc("PUT /documents/{id}", handleSaveDocument)
+	mux.HandleFunc("POST /documents/{id}/save", handleSaveDocument) // For sendBeacon (POST only)
 
 	// WebSocket Endpoint
 	mux.HandleFunc("GET /ws/{id}", func(w http.ResponseWriter, r *http.Request) {
@@ -107,6 +119,27 @@ func handleGetDocument(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(doc)
+}
+
+func handleSaveDocument(w http.ResponseWriter, r *http.Request) {
+	id := r.PathValue("id")
+
+	var req struct {
+		CRDTChars []crdt.Char `json:"crdt_chars"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	if err := database.UpdateDocument(r.Context(), id, req.CRDTChars); err != nil {
+		http.Error(w, "Failed to save document", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{"status": "saved"})
 }
 
 // --- Middleware ---

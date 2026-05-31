@@ -1,12 +1,11 @@
 package websocket
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 	"time"
 
-	"collab-backend/internal/models"
+	"googledocsclone/internal/models"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 )
@@ -23,7 +22,8 @@ type Client struct {
 	Hub        *Hub
 	Conn       *websocket.Conn
 	DocumentID string
-	Send       chan models.WSMessage // Buffered channel for outbound messages
+	Send       chan *models.WSMessage // Buffered channel for outbound messages
+	Room       *Room
 }
 
 // ReadPump listens for incoming WS messages from this specific client
@@ -80,15 +80,17 @@ func ServeWS(hub *Hub, w http.ResponseWriter, r *http.Request, documentID string
 		return
 	}
 
+	room := hub.GetOrCreateRoom(documentID)
 	client := &Client{
 		ID:         uuid.New().String(),
 		Hub:        hub,
 		Conn:       conn,
 		DocumentID: documentID,
-		Send:       make(chan models.WSMessage, 256),
+		Send:       make(chan *models.WSMessage, 256),
+		Room:       room,
 	}
 
-	client.Hub.Register <- client
+	client.Room.Register <- client
 
 	// Run pumps in separate goroutines
 	go client.WritePump()

@@ -2,8 +2,9 @@ package websocket
 
 import (
 	"sync"
-	"collab-backend/internal/database"
-	"collab-backend/internal/models"
+	"googledocsclone/internal/db"
+	"googledocsclone/internal/models"
+	"googledocsclone/internal/crdt"
 	"context"
 )
 
@@ -51,12 +52,16 @@ func (h *Hub) GetOrCreateRoom(docID string) *Room {
 
 	// Boot up room state from DB (MongoDB load-only layer)
 	doc, err := database.GetDocument(context.Background(), docID)
-	initialContent := ""
+	var initialCRDT *crdt.CRDTDocument
 	if err == nil && doc != nil {
-		initialContent = doc.Content
+		initialCRDT = &crdt.CRDTDocument{
+			Chars: doc.CRDTChars,
+		}
+	} else {
+		initialCRDT = crdt.NewDocument()
 	}
 
-	room = NewRoom(h, docID, initialContent)
+	room = NewRoom(h, docID, initialCRDT)
 	h.Rooms[docID] = room
 	
 	// Boot the dedicated Actor loop for this room

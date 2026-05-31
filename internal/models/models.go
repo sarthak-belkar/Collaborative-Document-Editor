@@ -14,10 +14,3 @@ type Document struct {
 	CreatedAt time.Time          `bson:"created_at" json:"created_at"`
 	UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
 }
-
-type WSMessage struct {
-	Type       string      `json:"type"`       // e.g., "join", "sync", "cursor"
-	DocumentID string      `json:"documentId"`
-	ClientID   string      `json:"clientId"`
-	Payload    interface{} `json:"payload"`    // Raw data/content for now
-}

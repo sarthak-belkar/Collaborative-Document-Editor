@@ -2,15 +2,15 @@ package crdt
 
 // Char represents a single character in the CRDT document
 type Char struct {
-	ID       string // Globally unique: "{userID}-{counter}"
-	Value    string // The actual character/string
-	Visible  bool   // False if deleted (Tombstone)
-	Position []int  // Fractional index for absolute ordering
+	ID       string `bson:"id" json:"id"`             // Globally unique: "{userID}-{counter}"
+	Value    string `bson:"value" json:"value"`        // The actual character/string
+	Visible  bool   `bson:"visible" json:"visible"`    // False if deleted (Tombstone)
+	Position []int  `bson:"position" json:"position"`  // Fractional index for absolute ordering
 }
 
 // CRDTDocument holds the full state of the document
 type CRDTDocument struct {
-	Chars []Char
+	Chars []Char `bson:"chars" json:"chars"`
 }
 
 func NewDocument() *CRDTDocument {

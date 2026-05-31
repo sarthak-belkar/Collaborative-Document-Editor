@@ -1,0 +1,438 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Google Docs Clone — Design System
+   Light theme inspired by Google Workspace
+   ============================================================ */
+
+/* --- Custom Theme Layer --- */
+@theme {
+  --color-gdocs-bg: #f9fbfd;
+  --color-gdocs-bg-alt: #f1f3f4;
+  --color-gdocs-page: #ffffff;
+  --color-gdocs-toolbar: #edf2fa;
+  --color-gdocs-toolbar-hover: #d3e3fd;
+  --color-gdocs-menubar: #ffffff;
+  --color-gdocs-blue: #1a73e8;
+  --color-gdocs-blue-hover: #1765cc;
+  --color-gdocs-blue-light: #d3e3fd;
+  --color-gdocs-text: #202124;
+  --color-gdocs-text-secondary: #5f6368;
+  --color-gdocs-text-muted: #80868b;
+  --color-gdocs-border: #dadce0;
+  --color-gdocs-border-light: #e8eaed;
+  --color-gdocs-icon: #444746;
+  --color-gdocs-icon-hover: #202124;
+  --color-gdocs-success: #188038;
+  --color-gdocs-warning: #ea8600;
+  --color-gdocs-danger: #d93025;
+  --color-gdocs-sidebar: #f8f9fa;
+
+  --font-sans: 'Inter', 'Roboto', system-ui, -apple-system, sans-serif;
+  --font-docs: 'Roboto', 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* --- Base Styles --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--color-gdocs-bg);
+  color: var(--color-gdocs-text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* --- Scrollbar (thin, Google-style) --- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #dadce0;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #bdc1c6;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #dadce0 transparent;
+}
+
+/* --- Document Page Shadow --- */
+.doc-page-shadow {
+  box-shadow:
+    0 1px 2px 0 rgba(60, 64, 67, 0.3),
+    0 2px 6px 2px rgba(60, 64, 67, 0.15);
+}
+
+/* --- Toolbar Button Base --- */
+.toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: var(--color-gdocs-icon);
+  cursor: pointer;
+  transition: background-color 0.1s ease, color 0.1s ease;
+  flex-shrink: 0;
+}
+
+.toolbar-btn:hover {
+  background-color: var(--color-gdocs-toolbar-hover);
+  color: var(--color-gdocs-icon-hover);
+}
+
+.toolbar-btn:active {
+  background-color: #c2d9f7;
+}
+
+.toolbar-btn.active {
+  background-color: var(--color-gdocs-blue-light);
+  color: var(--color-gdocs-blue);
+}
+
+.toolbar-btn:disabled {
+  opacity: 0.38;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* --- Toolbar Dropdown --- */
+.toolbar-dropdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 30px;
+  padding: 0 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-gdocs-text);
+  cursor: pointer;
+  font-size: 13px;
+  font-family: var(--font-sans);
+  transition: background-color 0.1s ease, border-color 0.1s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.toolbar-dropdown:hover {
+  background-color: var(--color-gdocs-toolbar-hover);
+  border-color: var(--color-gdocs-border);
+}
+
+/* --- Toolbar Divider --- */
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background-color: var(--color-gdocs-border);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+/* --- Menu Bar Styles --- */
+.menu-item {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-gdocs-text);
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.menu-item:hover {
+  background-color: var(--color-gdocs-toolbar-hover);
+}
+
+/* --- Document Title Input --- */
+.doc-title-input {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 18px;
+  font-weight: 400;
+  font-family: var(--font-docs);
+  color: var(--color-gdocs-text);
+  background: transparent;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  line-height: 1.5;
+  min-width: 100px;
+  max-width: 400px;
+}
+
+.doc-title-input:hover {
+  border-color: var(--color-gdocs-border);
+}
+
+.doc-title-input:focus {
+  border-color: var(--color-gdocs-blue);
+  box-shadow: 0 1px 2px 0 rgba(26, 115, 232, 0.3);
+}
+
+/* --- Editor Canvas & ContentEditable --- */
+.editor-container {
+  position: relative;
+  width: 100%;
+  min-height: 200px;
+  font-family: 'Roboto', 'Inter', sans-serif;
+  font-size: 11pt;
+  line-height: 1.65;
+  color: var(--color-gdocs-text);
+}
+
+.editor-mirror {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  border: none;
+  color: transparent;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  z-index: 1;
+}
+
+.editor-editable {
+  position: relative;
+  width: 100%;
+  min-height: 200px;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  color: var(--color-gdocs-text);
+  caret-color: var(--color-gdocs-text);
+  border: none;
+  outline: none;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  z-index: 2;
+  cursor: text;
+}
+
+.editor-editable:empty::before {
+  content: attr(data-placeholder);
+  color: var(--color-gdocs-text-muted);
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.editor-editable p { margin: 0; min-height: 1.65em; }
+.editor-editable ul, .editor-editable ol { margin: 0.4em 0; padding-left: 2em; }
+.editor-editable li { margin: 0.15em 0; }
+.editor-editable blockquote {
+  border-left: 3px solid var(--color-gdocs-border);
+  margin: 0.5em 0; padding: 0.25em 1em;
+  color: var(--color-gdocs-text-secondary);
+}
+
+/* --- Remote Caret Overlay --- */
+.remote-caret {
+  position: relative;
+  display: inline-block;
+  width: 0;
+  margin-left: -1px;
+  margin-right: -1px;
+  height: 1.3em;
+  vertical-align: middle;
+  border-left: 2px solid var(--caret-color);
+  animation: caret-blink 1s step-end infinite;
+  pointer-events: auto;
+}
+
+@keyframes caret-blink {
+  from, to { border-color: transparent; }
+  50% { border-color: var(--caret-color); }
+}
+
+.remote-caret-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  transform: translateX(-50%);
+  background-color: var(--caret-color);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.remote-caret:hover .remote-caret-tooltip {
+  opacity: 1;
+}
+
+/* --- Share Button --- */
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 24px;
+  height: 36px;
+  border-radius: 18px;
+  border: none;
+  background: var(--color-gdocs-blue-light);
+  color: var(--color-gdocs-blue);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  white-space: nowrap;
+}
+
+.share-btn:hover {
+  background-color: #b4d3f5;
+  box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3);
+}
+
+.share-btn:active {
+  background-color: #a5caf0;
+}
+
+/* --- Connection Badge (Light theme) --- */
+.connection-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.connection-dot.connected {
+  background-color: var(--color-gdocs-success);
+  animation: pulse-dot 2s infinite;
+}
+
+.connection-dot.reconnecting {
+  background-color: var(--color-gdocs-warning);
+}
+
+.connection-dot.offline {
+  background-color: var(--color-gdocs-danger);
+}
+
+@keyframes pulse-dot {
+  0% { box-shadow: 0 0 0 0 rgba(24, 128, 56, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(24, 128, 56, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(24, 128, 56, 0); }
+}
+
+/* --- Sidebar Animation --- */
+.sidebar-enter {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.sidebar-enter-active {
+  transform: translateX(0);
+  opacity: 1;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+}
+
+.sidebar-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.sidebar-exit-active {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.15s ease;
+}
+
+/* --- Dashboard Card Hover --- */
+.doc-card {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.doc-card:hover {
+  box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  border-color: transparent;
+}
+
+/* --- Utility: Google Docs style focus ring --- */
+.gdocs-focus-ring:focus-visible {
+  outline: 2px solid var(--color-gdocs-blue);
+  outline-offset: 1px;
+}
+
+/* --- Tooltip --- */
+.gdocs-tooltip {
+  position: relative;
+}
+
+.gdocs-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-gdocs-text);
+  color: white;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 50;
+}
+
+.gdocs-tooltip:hover::after {
+  opacity: 1;
+}

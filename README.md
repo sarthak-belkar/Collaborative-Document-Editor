@@ -53,7 +53,7 @@ A highly concurrent, horizontally scalable, lock-free real-time backend for a co
 Start MongoDB and Redis locally using Docker:
 
 ```bash
-docker run -p 27017:27017 -d mongo:latest
+docker run -p 27017:27017 -d mongo:6.0-jammy
 docker run -p 6379:6379 -d redis:latest
 
 ```

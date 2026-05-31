@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"googledocsclone/internal/crdt"
-	"googledocsclone/internal/database"
+	"googledocsclone/internal/db"
 	"googledocsclone/internal/models"
 	redisLayer "googledocsclone/internal/redis"
 	syncEngine "googledocsclone/internal/sync"
@@ -86,6 +86,13 @@ func (r *Room) Run() {
 		case client := <-r.Register:
 			r.Clients[client] = true
 			log.Printf("Client %s joined room %s", client.ID, r.ID)
+			
+			// Send join message back to client so they know their userID
+			client.Send <- &models.WSMessage{
+				Type:       models.MsgTypeJoin,
+				DocumentID: r.ID,
+				UserID:     client.ID,
+			}
 
 		case client := <-r.Unregister:
 			if _, ok := r.Clients[client]; ok {
