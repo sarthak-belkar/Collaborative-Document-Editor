@@ -4,8 +4,8 @@ A highly concurrent, horizontally scalable, lock-free real-time backend for a co
 
 ## Images
 
-![Dashboard](images/editorimg1.png)
-![Cursor Tracking](images/editorimg2.png)
+![Dashboard](Images/editorimg1.png)
+![Cursor Tracking](Images/editorimg2.png)
 
 ## Features
 
