@@ -2,6 +2,11 @@
 
 A highly concurrent, horizontally scalable, lock-free real-time backend for a collaborative document editor (similar to Google Docs). Built entirely in Go, this system utilizes Conflict-Free Replicated Data Types (CRDTs), the Actor concurrency model, Redis Pub/Sub for stateless scaling, and Version Vectors for seamless offline synchronization.
 
+## Images
+
+![Dashboard](images/editorimg1.png)
+![Cursor Tracking](images/editorimg2.png)
+
 ## Features
 
 * **Mathematical Conflict Resolution (CRDT):** Uses Fractional Indexing (LSEQ/Logoot family) to ensure absolute eventual consistency without requiring a centralized sequencing server. Concurrent edits never overwrite each other.
